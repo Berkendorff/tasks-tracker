@@ -73,3 +73,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
   Nest is [MIT licensed](LICENSE).
+
+## About
+
+  Realized simple service "Task tracker" with NestJs.
+  It allows to create users, tasks and manage them.
+
+## Api
+  After run service with ```npm run start / start:dev``` you can go to the swagger by ```/api``` route
