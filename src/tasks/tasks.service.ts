@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { TaskStatus } from './taskStatus.enum';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { TasksFilterDto } from './dto/getTasksFilter.dto';
@@ -7,6 +7,8 @@ import { TaskRepository } from './task.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
 import { User } from 'src/users/user.entity';
+import { ChangeTaskOwnerDto } from './dto/changeTaskOwner.dto';
+import { UserRepository } from 'src/users/user.repository';
 
 @Injectable()
 export class TasksService {
@@ -14,6 +16,7 @@ export class TasksService {
     constructor(
         @InjectRepository(TaskRepository)
         private taskRepository: TaskRepository,
+        private userRepository: UserRepository,
         ){}
 
     async getTasks(filterDto: TasksFilterDto): Promise<Task[]> {
@@ -40,6 +43,24 @@ export class TasksService {
 
     async updateTask(taskId: number, updateTask: UpdateTaskDto): Promise<Task>{
         return await this.taskRepository.updateTask(taskId, updateTask);
+    }
+
+    async changeTaskOwner(user: User, changeTaskOwnerDto: ChangeTaskOwnerDto): Promise<{statusCode: string}>{
+        let {taskId, newOwnerId} = changeTaskOwnerDto;
+        taskId = Number(taskId);
+        newOwnerId = Number(newOwnerId);
+        if(!taskId||!newOwnerId) throw new BadRequestException('TaskId & New Owner Id must be numbers')
+        if(newOwnerId===user.id) throw new BadRequestException('You are owner of this task');
+
+        const task: Task = user.tasks.find(task=>task.id===taskId);
+        if(!task) throw new BadRequestException('You are not owner of this task');
+
+        const newOwner = await this.userRepository.findOne({id: newOwnerId});
+        if(!newOwner) throw new BadRequestException('This user not exists');
+       
+        task.user = newOwner;
+        await task.save()
+        return { statusCode: "204"};
     }
 
     async deleteTask(taskId: number):Promise<{ message: string }>{

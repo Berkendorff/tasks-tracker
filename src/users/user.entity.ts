@@ -24,7 +24,7 @@ export class User extends BaseEntity {
     @Column('text')
     salt: string;
 
-    @Column()
+    @Column({default: null})
     date_creation: Date;
 
     @OneToMany(type=>Task,task=>task.user, {eager: true})

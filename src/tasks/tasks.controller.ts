@@ -11,7 +11,8 @@ import {
     UsePipes, 
     ParseIntPipe,
     UseGuards,
-    Req
+    Req,
+    Put
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { TaskStatus} from './taskStatus.enum';
@@ -23,6 +24,7 @@ import { Task } from './task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/decorators/getUser.decorator';
 import { User } from 'src/users/user.entity';
+import { ChangeTaskOwnerDto } from './dto/changeTaskOwner.dto';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -50,6 +52,14 @@ export class TasksController {
         return await this.tasksService.createTask(createTaskDto, user);
     }
 
+    @Put('/change_owner')
+    @UseGuards(AuthGuard())
+    @UsePipes(ValidationPipe)
+    async changeOwner(@Req() req, @Body() changeTaskOwnerDto: ChangeTaskOwnerDto ): Promise<{statusCode: string}>{
+        const user: User = req.user;
+        return await this.tasksService.changeTaskOwner(user, changeTaskOwnerDto);
+    }
+
     @Patch('/:id')
     @UsePipes(ValidationPipe)
     async updateTask(@Param('id', ParseIntPipe) taskId: number,@Body() updateTask: UpdateTaskDto): Promise<Task>{
@@ -71,5 +81,7 @@ export class TasksController {
     async test(@GetUser() user: User){
         console.log(user);
     }
+
+    
 
 }
