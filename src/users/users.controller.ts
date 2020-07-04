@@ -3,19 +3,28 @@ import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
+@UseGuards(AuthGuard())
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
+    @ApiBody({
+        description:'Get all users with pagination by 10 pages, query param ?page=number>0',
+        type:Number
+    })
     @Get()
-    @UseGuards(AuthGuard())
     async getUsers(@Query('page', ParseIntPipe) page: number): Promise<User[]>{
         if(page<0) throw new BadRequestException('Bad guy!')
         return await this.usersService.getUsers(page);
     }
+
+    @ApiBody({
+        description: 'Get info about self user'
+    })
     @Get('/self')
-    @UseGuards(AuthGuard())
     async getSelf(@Req() req): Promise<User>{
         const user = req.user;
         delete user.password;
@@ -23,23 +32,30 @@ export class UsersController {
         delete user.tasks;
         return user;
     }
+    @ApiBody({
+        description: 'Get user by id in param id',
+        type: 'number'
+    })
     @Get(':id')
-    @UseGuards(AuthGuard())
     async getUserById(@Param('id', ParseIntPipe) userId: number): Promise<User>{
         return await this.usersService.getUserById(userId);
     }
     
-
+    @ApiBody({
+        description:'Update user info',
+        type: UpdateUserDto
+    })
     @Patch()
-    @UseGuards(AuthGuard())
     @UsePipes(ValidationPipe)
     async updateUser(@Body() updateUserDto: UpdateUserDto, @Req() req): Promise<User>{
         const user: User = req.user;
         return await this.usersService.updateUser(updateUserDto, user);
     }
 
+    @ApiBody({
+        description: 'Delete user (self)'
+    })
     @Delete()
-    @UseGuards(AuthGuard())
     async deleteUser(@Req() req): Promise<{statusCode:string}>{
         const user: User = req.user;
         return await this.usersService.deleteUser(user);

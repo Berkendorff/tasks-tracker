@@ -63,8 +63,11 @@ export class TasksService {
         return { statusCode: "204"};
     }
 
-    async deleteTask(taskId: number):Promise<{ message: string }>{
-        return this.taskRepository.deleteTask(taskId);
+    async deleteTask(user: User, taskId: number):Promise<{ statusCode: string }>{
+        const task = await user.tasks.find(task=>task.id===taskId);
+        if(!task) throw new BadRequestException('You are not owner of this task!');
+        await task.remove()
+        return {statusCode: '204'};
     }
  
 }
