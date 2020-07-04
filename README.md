@@ -81,3 +81,8 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Api
   After run service with ```npm run start / start:dev``` you can go to the swagger by ```/api``` route
+
+## DB and Env
+
+  DB is PostgreSQL with TypeOrm
+  sample env attached
