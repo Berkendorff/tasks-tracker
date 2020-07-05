@@ -1,2 +1,2 @@
 FROM postgres:12-alpine As db
-RUN "echo 123"
+ADD src/sql/create_db /docker-entrypoint-initdb.d/

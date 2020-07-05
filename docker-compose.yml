@@ -36,7 +36,7 @@ services:
         POSTGRES_DB: "TasksTracker"
         PG_DATA: /var/lib/postgresql/data
     ports:
-        - "5858:5858"
+        - "5432:5432"
     env_file: 
         - database.env
     volumes:
