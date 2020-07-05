@@ -93,5 +93,5 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
   Run service with ```npm run start / start:dev``` you can go to the swagger by ```/api``` route
 
 ## Docker 
-  install [docker](https://docs.docker.com/get-docker/) 
-  ```docker-compose up``` in ```./``` dir and smile) 
+  install [docker](https://docs.docker.com/get-docker/) and exec 
+  ```sudo docker-compose up``` in ```./``` dir and smile) 
