@@ -1,0 +1,48 @@
+# docker-compose.yml
+version: '3.4'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+      target: development
+      dockerfile: src/dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    build:
+      context: .
+      target: db
+      dockerfile: src/sql/sqldockerfile
+    image: postgres:12
+    networks:
+        - webnet
+    environment: 
+        POSTGRES_PASSWORD: "postgres"
+        POSTGRES_USER: "postgres"
+        POSTGRES_DB: "TasksTracker"
+        PG_DATA: /var/lib/postgresql/data
+    ports:
+        - "5858:5858"
+    env_file: 
+        - database.env
+    volumes:
+        - pgdata:/var/lib/postgresql/data
+
+networks:
+    webnet:
+volumes:
+    pgdata:

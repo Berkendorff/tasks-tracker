@@ -87,3 +87,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
   DB is PostgreSQL with TypeOrm
   
   sample env attached
+
+## Docker 
+  ```docker-compose up``` and smile)
