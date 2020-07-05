@@ -79,14 +79,19 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
   Realized simple service "Task tracker" with NestJs.
   It allows to create users, tasks and manage them.
 
-## Api
-  After run service with ```npm run start / start:dev``` you can go to the swagger by ```/api``` route
+# Setup
+  Light short guide for setup
 
-## DB and Env
+## Env
+  Add ```.env``` like ```sample.env``` and save in ```./``` dir 
 
-  DB is PostgreSQL with TypeOrm
-  
-  sample env attached
+## DB install
+
+  Install PostgreSql with command ``` sudo apt update / sudo apt install postgresql postgresql-contrib / sudo apt install pgadmin4 pgadmin4-apache2 -y```
+
+## Start
+  Run service with ```npm run start / start:dev``` you can go to the swagger by ```/api``` route
 
 ## Docker 
-  ```docker-compose up``` and smile)
+  install [docker](https://docs.docker.com/get-docker/) 
+  ```docker-compose up``` in ```./``` dir and smile) 
